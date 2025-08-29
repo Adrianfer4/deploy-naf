@@ -1,20 +1,22 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config(); // Carga las variables de entorno
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+require("dotenv").config(); // Carga las variables de entorno
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Conexión a la base de datos
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log("Conectado a MongoDB Atlas!"))
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Conectado a MongoDB Atlas!"))
   .catch((err) => console.error("Error al conectar a MongoDB:", err));
 
 // Importar el modelo
-const Todo = require('./models/Todo');
+const Todo = require("./models/Todo");
 
 // Middleware
 app.use(cors()); // Permite la comunicación entre cliente y servidor
@@ -31,7 +33,7 @@ app.get("/api/todos", async (req, res) => {
 // CREAR una nueva tarea
 app.post("/api/todos", async (req, res) => {
   const newTodo = new Todo({
-    text: req.body.text
+    text: req.body.text,
   });
   await newTodo.save();
   res.json(newTodo);
@@ -52,14 +54,14 @@ app.delete("/api/todos/:id", async (req, res) => {
 });
 
 // Servir archivos estáticos de React en producción
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   // Path código del cliente
-  app.use(express.static('./client/build'));
+  app.use(express.static("./client/build"));
 
-  const path = require('path');
+  const path = require("path");
   // Para cualquier otra ruta que no sea de la API, sirve el index.html de React
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
 
