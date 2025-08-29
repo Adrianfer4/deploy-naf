@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-// La URL del backend.
-// const API_URL = '';
+const API_URL = 'http://localhost:5001/api/todos';
  
 function App() {
   const [todos, setTodos] = useState([]);
